@@ -16,8 +16,7 @@ for file in mermaid/*.mmd; do
     if [ -f "$file" ]; then
         base_name=$(basename "$file" .mmd)
         mmdc -i "$file" -o "mermaid/output/${base_name}.png" \
-            --backgroundColor white \
-            --configFile mermaid/config.json
+            --backgroundColor white
     fi
 done
 
