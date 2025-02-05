@@ -2,7 +2,8 @@ site_name: My Docs
 nav:
   - Home: index.md  
   - Getting Started: getting-started.md  
-  - API Reference: api.md  
+  - API Reference: api.md
+  - Misc Stuff: misc-stuff.md
 
 theme:
   name: material
