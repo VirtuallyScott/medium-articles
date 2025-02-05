@@ -13,7 +13,7 @@ RUN pip install --no-cache-dir \
     mkdocs==1.6.1 \
     mkdocs-material==9.6.2 \
     mkdocs-material-extensions==1.3.1 \
-    pymdown-extensions[extra]==10.14.3 \
+    pymdown-extensions[extra,mermaid]==10.14.3 \
     mkdocs-awesome-pages-plugin
 
 # Copy docs and change ownership
