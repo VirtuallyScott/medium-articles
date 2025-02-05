@@ -3,14 +3,22 @@ nav:
   - Home: index.md  
   - Getting Started: getting-started.md  
   - API Reference: api.md  
-theme: material
+
+theme:
+  name: material
+
 plugins:
   - search
   - awesome-pages
+
+extra:
+  mermaid:
+    version: 10  # Enable built-in Mermaid support in MkDocs Material
+  generator: false  # Fix service-worker.js warning
+
 markdown_extensions:
-  - pymdownx.superfences
-  - pymdownx.snippets
-  - pymdownx.details
-  - pymdownx.tabbed
-  - pymdownx.tasklist
-  - pymdownx.mermaid
+  - pymdownx.arithmatex
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
