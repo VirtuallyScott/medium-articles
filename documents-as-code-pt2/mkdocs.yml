@@ -6,7 +6,8 @@ nav:
 theme: material
 plugins:
   - search
-  - toc
+  - toc:
+      toc_depth: 2-6
 markdown_extensions:
   - pymdownx.superfences
   - pymdownx.snippets
