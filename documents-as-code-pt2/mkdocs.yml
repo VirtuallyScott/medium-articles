@@ -1,0 +1,26 @@
+site_name: My Docs  
+nav:
+  - Home: index.md  
+  - Getting Started: getting-started.md  
+  - API Reference: api.md
+  - Misc Stuff: misc-stuff.md
+
+theme:
+  name: material
+
+plugins:
+  - search
+  - awesome-pages
+
+extra:
+  mermaid:
+    version: 10  # Enable built-in Mermaid support in MkDocs Material
+  generator: false  # Fix service-worker.js warning
+  remote_url: https://<GITHUB_USERNAME>:${GITHUB_TOKEN}@github.com/<GITHUB_USERNAME>/<REPO_NAME>.git
+
+markdown_extensions:
+  - pymdownx.arithmatex
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
