@@ -1,15 +1,24 @@
 #!/bin/bash
 
+# Environment Variables:
+# GITHUB_TOKEN: Personal access token for GitHub authentication
+# GITHUB_EMAIL: Email associated with the GitHub account
+# GITHUB_USERNAME: GitHub username
+# REPO_NAME: Name of the GitHub repository
+
 # Set variables
 CONTAINER_NAME="mkdocs-deploy"
 IMAGE_NAME="mkdocs-site"
 REPO_PATH=$(pwd)
 DOCS_PATH="$REPO_PATH/documents-as-code-pt2"
-GITHUB_TOKEN="${NEWGHTOKEN}"
+GITHUB_TOKEN="${GITHUB_TOKEN}"
+GITHUB_EMAIL="${GITHUB_EMAIL}"
+GITHUB_USERNAME="${GITHUB_USERNAME}"
+REPO_NAME="${REPO_NAME}"
 
 # Ensure required environment variables are set
-if [ -z "$GITHUB_TOKEN" ]; then
-    echo "Error: GITHUB_TOKEN is not set."
+if [ -z "$GITHUB_TOKEN" ] || [ -z "$GITHUB_EMAIL" ] || [ -z "$GITHUB_USERNAME" ] || [ -z "$REPO_NAME" ]; then
+    echo "Error: One or more environment variables are not set."
     exit 1
 fi
 
@@ -41,9 +50,9 @@ docker run -d --name $CONTAINER_NAME \
 # Step 4: Configure Git and deploy
 echo "📢 Deploying documentation to GitHub Pages..."
 docker exec -it $CONTAINER_NAME sh -c "
-  git config --global user.email 'scott.smith@virtuallyscott.com' &&
-  git config --global user.name 'virtuallyscott' &&
-  git remote set-url origin https://$GITHUB_TOKEN@github.com/VirtuallyScott/medium-articles.git &&
+  git config --global user.email '$GITHUB_EMAIL' &&
+  git config --global user.name '$GITHUB_USERNAME' &&
+  git remote set-url origin https://$GITHUB_TOKEN@github.com/$GITHUB_USERNAME/$REPO_NAME.git &&
   mkdocs build &&
   mkdocs gh-deploy --force --verbose --remote-name origin --remote-branch gh-pages
 "
@@ -53,4 +62,4 @@ echo "🧹 Cleaning up..."
 docker stop $CONTAINER_NAME && docker rm $CONTAINER_NAME
 
 echo "✅ Deployment complete! Your site should be live at:"
-echo "🌍 https://virtuallyscott.github.io/medium-articles/"
+echo "🌍 https://$GITHUB_USERNAME.github.io/$REPO_NAME/"
