@@ -15,6 +15,7 @@ extra:
   mermaid:
     version: 10  # Enable built-in Mermaid support in MkDocs Material
   generator: false  # Fix service-worker.js warning
+  remote_url: https://<GITHUB_USERNAME>:${GITHUB_TOKEN}@github.com/<GITHUB_USERNAME>/<REPO_NAME>.git
 
 markdown_extensions:
   - pymdownx.arithmatex
