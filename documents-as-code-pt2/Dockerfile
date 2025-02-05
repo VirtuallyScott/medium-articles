@@ -24,4 +24,8 @@ RUN chown -R docsuser:docsuser /home/docsuser
 
 USER docsuser
 
+# Fix SSH permissions
+RUN mkdir -p /home/docsuser/.ssh && chmod 700 /home/docsuser/.ssh
+RUN touch /home/docsuser/.ssh/config && chmod 600 /home/docsuser/.ssh/config
+
 CMD ["mkdocs", "serve", "-a", "0.0.0.0:8000"]
