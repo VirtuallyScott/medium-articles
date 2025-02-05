@@ -6,7 +6,7 @@ nav:
 theme: material
 plugins:
   - search
-  - table-of-contents
+  - toc
 markdown_extensions:
   - pymdownx.superfences
   - pymdownx.snippets
