@@ -1,5 +1,8 @@
 FROM python:3.9-slim
 
+# Install Git
+RUN apt-get update && apt-get install -y git
+
 # Create a non-root user
 RUN useradd -m docsuser
 WORKDIR /home/docsuser/docs
