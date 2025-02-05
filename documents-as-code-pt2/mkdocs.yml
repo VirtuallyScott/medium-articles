@@ -13,3 +13,4 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.tabbed
   - pymdownx.tasklist
+  - pymdownx.mermaid
