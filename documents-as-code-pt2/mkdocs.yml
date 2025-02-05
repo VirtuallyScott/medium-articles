@@ -1,0 +1,15 @@
+site_name: My Docs  
+nav:
+  - Home: index.md  
+  - Getting Started: getting-started.md  
+  - API Reference: api.md  
+theme: material
+plugins:
+  - search
+  - table-of-contents
+markdown_extensions:
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - pymdownx.details
+  - pymdownx.tabbed
+  - pymdownx.tasklist
