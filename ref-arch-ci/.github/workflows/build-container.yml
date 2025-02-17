@@ -31,7 +31,7 @@ jobs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ secrets.automationToken }}
         
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0.10.2
@@ -55,6 +55,6 @@ jobs:
           ghcr.io/${{ github.repository }}:${{ steps.gitversion.outputs.semVer }}
           ghcr.io/${{ github.repository }}:latest
         build-args: |
-          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN=${{ secrets.automationToken }}
           VERSION=${{ steps.gitversion.outputs.semVer }}
           ARTIFACT_NAME=${{ fromJson(steps.manifest.outputs.data).app.name }}

@@ -86,22 +86,23 @@ The pipeline is implemented using GitHub Actions workflows in:
    - Enable "Improved container support"
    - Configure container write permissions for GitHub Actions
 
-4. **GitHub Token (Manual Execution)**
-   To execute the pipeline manually, you'll need a GitHub token with the following permissions:
-   ```bash
-   gh auth login
-   gh auth refresh -h github.com -s write:packages
-   ```
-   
-   Or create a new token with these scopes:
+4. **GitHub Token Configuration**
+   The pipeline expects a GitHub token named `automationToken` with the following permissions:
    - `read:packages`
    - `write:packages`
    - `delete:packages`
    - `repo`
    
-   Command to create token:
+   To create and configure the token:
+   1. Create token with required scopes:
    ```bash
    gh auth token --scopes write:packages,delete:packages,repo
+   ```
+   2. Add token to repository secrets with name: `automationToken`
+   
+   For manual execution, you can use:
+   ```bash
+   export GITHUB_TOKEN=<your-automation-token>
    ```
 
 5. **Branch Protection (Optional)**
