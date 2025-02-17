@@ -1,6 +1,6 @@
 app:
   name: hello-service
-  version: 1.0.0
+  version: 0.0.0  # Version will be determined by GitVersion
   type: java
   
   build:

@@ -2,7 +2,7 @@ name: Build and Publish Artifact
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop, 'release/*' ]
   pull_request:
     branches: [ main ]
 
@@ -15,6 +15,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # Required for GitVersion
+    
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.10.2
+      with:
+        versionSpec: '5.x'
+        
+    - name: Determine Version
+      id: gitversion
+      uses: gittools/actions/gitversion/execute@v0.10.2
+      with:
+        useConfigFile: true
+        configFilePath: GitVersion.yml
     
     - name: Read manifest
       id: manifest
@@ -32,6 +46,7 @@ jobs:
     - name: Build with Maven
       run: |
         cd src
+        ./mvnw versions:set -DnewVersion=${{ steps.gitversion.outputs.semVer }}
         ./mvnw clean package
         
     - name: Publish to GitHub Packages

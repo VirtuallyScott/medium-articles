@@ -32,6 +32,18 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.10.2
+      with:
+        versionSpec: '5.x'
+        
+    - name: Determine Version
+      id: gitversion
+      uses: gittools/actions/gitversion/execute@v0.10.2
+      with:
+        useConfigFile: true
+        configFilePath: GitVersion.yml
+
     - name: Build and push Docker image
       uses: docker/build-push-action@v4
       with:
@@ -39,9 +51,9 @@ jobs:
         file: ./ci/Dockerfile
         push: true
         tags: |
-          ghcr.io/${{ github.repository }}:${{ fromJson(steps.manifest.outputs.data).app.version }}
+          ghcr.io/${{ github.repository }}:${{ steps.gitversion.outputs.semVer }}
           ghcr.io/${{ github.repository }}:latest
         build-args: |
           GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
-          VERSION=${{ fromJson(steps.manifest.outputs.data).app.version }}
+          VERSION=${{ steps.gitversion.outputs.semVer }}
           ARTIFACT_NAME=${{ fromJson(steps.manifest.outputs.data).app.name }}
