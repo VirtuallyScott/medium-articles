@@ -1,0 +1,47 @@
+name: Build and Publish Container
+
+on:
+  workflow_run:
+    workflows: ["Build and Publish Artifact"]
+    types:
+      - completed
+  schedule:
+    - cron: '0 0 1 * *'  # Monthly rebuild
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'schedule' }}
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Read manifest
+      id: manifest
+      uses: pietrobolcato/action-read-yaml@1.1.0
+      with:
+        file: './src/app-manifest.yml'
+        
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./ci/Dockerfile
+        push: true
+        tags: |
+          ghcr.io/${{ github.repository }}:${{ fromJson(steps.manifest.outputs.data).app.version }}
+          ghcr.io/${{ github.repository }}:latest
+        build-args: |
+          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          VERSION=${{ fromJson(steps.manifest.outputs.data).app.version }}
+          ARTIFACT_NAME=${{ fromJson(steps.manifest.outputs.data).app.name }}

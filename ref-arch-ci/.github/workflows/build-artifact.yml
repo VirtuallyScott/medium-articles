@@ -1,0 +1,42 @@
+name: Build and Publish Artifact
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Read manifest
+      id: manifest
+      uses: pietrobolcato/action-read-yaml@1.1.0
+      with:
+        file: './src/app-manifest.yml'
+    
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: ${{ fromJson(steps.manifest.outputs.data).app.build.jdk }}
+        distribution: 'temurin'
+        cache: maven
+        
+    - name: Build with Maven
+      run: |
+        cd src
+        ./mvnw clean package
+        
+    - name: Publish to GitHub Packages
+      run: |
+        cd src
+        ./mvnw deploy
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

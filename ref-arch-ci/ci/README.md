@@ -2,32 +2,66 @@
 
 This directory contains the CI pipeline configuration that implements a standardized build and deployment process based on application manifests.
 
-## Pipeline Overview
+## Manifest Usage
 
-The pipeline consists of two main workflows:
+The `app-manifest.yml` file drives the entire CI/CD process:
 
-1. **Build and Publish Artifact**
-   - Reads app-manifest.yml to determine build requirements
-   - Sets up specified JDK version
-   - Builds application using Maven/Gradle
-   - Runs tests
-   - Publishes artifact to GitHub Packages
+### Build & Artifact Publishing
+```yaml
+app:
+  name: <name>          # Used for artifact naming
+  version: <version>    # Sets artifact version
+  build:
+    jdk: <version>     # Determines JDK version in CI
+    framework: <type>  # Configures build tools
+```
+- CI reads JDK version to set up build environment
+- Artifact is published using name/version from manifest
+- Dependencies are installed based on manifest specs
 
-2. **Container Image Build**
-   - Triggered either by:
+### Container Build
+```yaml
+app:
+  container:
+    base: <image>      # Base container image
+    ports:            # Container port configuration
+      - port: <number>
+    env:              # Runtime environment variables
+      - name: <name>
+        value: <value>
+```
+- Container build uses specified base image
+- Ports from manifest are exposed in container
+- Environment variables are configured in container
+
+## Pipeline Workflows
+
+1. **Build and Publish Artifact** (.github/workflows/build-artifact.yml)
+   - Triggered on:
+     - Push to main branch
+     - Pull request to main
+   - Actions:
+     - Reads manifest for JDK version
+     - Sets up build environment
+     - Builds and tests application
+     - Publishes to GitHub Packages
+
+2. **Container Image Build** (.github/workflows/build-container.yml)
+   - Triggered on:
      - New artifact publication
-     - Monthly schedule for base image updates
-   - Pulls latest artifact from GitHub Packages
-   - Builds container image using multi-stage Dockerfile
-   - Tags and pushes to GitHub Container Registry
+     - Monthly schedule (base image updates)
+   - Actions:
+     - Downloads artifact from GitHub Packages
+     - Builds container with manifest configuration
+     - Pushes to GitHub Container Registry
 
 ## Benefits
 
-- Developers only need to maintain app-manifest.yml
-- Standardized build and deployment process
-- Regular security updates through scheduled rebuilds
-- Clear separation of build and runtime environments
-- Automated artifact and container publishing
+- Declarative application configuration
+- Standardized build process
+- Automated security updates
+- Clear separation of concerns
+- Infrastructure as Code
 
 ## Implementation
 
