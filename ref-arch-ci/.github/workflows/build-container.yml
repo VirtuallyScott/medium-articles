@@ -3,6 +3,7 @@ name: Build and Publish Container
 on:
   workflow_run:
     workflows: ["Build and Publish Artifact"]
+    branches: [ main, 'feature/ref-arch-ci' ]
     types:
       - completed
   schedule:

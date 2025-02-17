@@ -2,9 +2,9 @@ name: Build and Publish Artifact
 
 on:
   push:
-    branches: [ main, develop, 'release/*' ]
+    branches: [ main, develop, 'release/*', 'feature/ref-arch-ci' ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, 'feature/ref-arch-ci' ]
 
 jobs:
   build:
