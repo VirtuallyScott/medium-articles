@@ -68,3 +68,29 @@ app:
 The pipeline is implemented using GitHub Actions workflows in:
 - .github/workflows/build-artifact.yml
 - .github/workflows/build-container.yml
+
+## GitHub Setup Requirements
+
+1. **Repository Settings**
+   - Go to Settings > Actions > General
+   - Enable "Read and write permissions" under "Workflow permissions"
+   - Allow GitHub Actions to create and approve pull requests
+
+2. **Package Registry**
+   - Go to Settings > Packages
+   - Ensure Packages is enabled for the repository
+   - Grant package write permissions to GitHub Actions
+
+3. **Container Registry**
+   - Go to Settings > Packages
+   - Enable "Improved container support"
+   - Configure container write permissions for GitHub Actions
+
+4. **Secrets**
+   No additional secrets needed as we use GITHUB_TOKEN, which is automatically provided.
+
+5. **Branch Protection (Optional)**
+   - Go to Settings > Branches
+   - Add rule for 'main' branch
+   - Enable "Require status checks to pass before merging"
+   - Add the workflow status checks as required
