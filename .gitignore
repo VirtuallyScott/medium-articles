@@ -1,0 +1,58 @@
+# macOS
+*.DS_Store
+.AppleDB
+.AppleDesktop
+.AppleDouble
+.apdisk
+._*
+.com.apple.timemachine.donotpresent
+.DocumentRevisions-V100
+.fseventsd
+.LSOverride
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+Icon
+Network Trash Folder
+Temporary Items
+
+# Python
+*.egg
+*.egg-info/
+*.py[cod]
+*.so
+*$py.class
+__pycache__/
+.eggs/
+.env
+.installed.cfg
+.Python
+.venv
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+env/
+env.bak/
+ENV/
+lib/
+lib64/
+MANIFEST
+parts/
+sdist/
+var/
+venv/
+venv.bak/
+wheels/
+
+# VS Code
+*.vsix
+.history/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/*.code-snippets
