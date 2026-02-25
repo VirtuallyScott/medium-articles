@@ -12,7 +12,7 @@ import yaml
 
 def load_approved_verbs():
     """Load approved verbs from YAML configuration file."""
-    verbs_file = Path(__file__).parent.parent / "approved-ansible-verbs.yml"
+    verbs_file = Path(__file__).parent.parent / "approved-verbs.yml"
     
     try:
         with open(verbs_file, 'r') as f:
@@ -97,7 +97,7 @@ class PlaybookNamingRule(AnsibleLintRule):
         if verb not in APPROVED_VERBS:
             results.append(
                 self.create_matcherror(
-                    message=f"Playbook '{filename}' uses unapproved verb '{verb}'. See tools/approved-ansible-verbs.yml for approved verbs.",
+                    message=f"Playbook '{filename}' uses unapproved verb '{verb}'. See tools/approved-verbs.yml for approved verbs.",
                     filename=file,
                 )
             )

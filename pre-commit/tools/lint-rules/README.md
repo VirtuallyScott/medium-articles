@@ -36,7 +36,7 @@ Enforces the `verb-noun.yml` naming pattern for Ansible playbooks.
 ## Approved Verbs
 
 The source of truth for approved verbs is maintained in:
-**`tools/approved-ansible-verbs.yml`**
+**`tools/approved-verbs.yml`**
 
 Current approved verbs (alphabetized):
 - apply, audit, bootstrap, build, cleanup, configure, create, deploy, destroy
@@ -64,7 +64,7 @@ pre-commit run ansible-lint --all-files
 
 ## Adding New Verbs
 
-1. Edit `tools/approved-ansible-verbs.yml`
+1. Edit `tools/approved-verbs.yml`
 2. Add the new verb in alphabetical order
 3. Document the decision (link to MR/issue if applicable)
 4. The lint rule will automatically pick up the change
@@ -73,7 +73,7 @@ pre-commit run ansible-lint --all-files
 
 ```
 tools/
-├── approved-ansible-verbs.yml    # Source of truth for approved verbs
+├── approved-verbs.yml           # Source of truth for approved verbs
 ├── lint-rules/
 │   ├── __init__.py              # Module initialization
 │   ├── playbook_naming.py       # ORG001 rule implementation

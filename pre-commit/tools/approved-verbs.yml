@@ -1,8 +1,9 @@
 ---
-# Approved Ansible Playbook Verbs
-# Source of truth for playbook naming validation
+# Approved Verbs for Naming Conventions
+# Source of truth for verb-noun naming validation
+# Used by: Shell scripts, Python scripts, and Ansible playbooks
 # Inspired by PowerShell verb-noun discipline
-# See: ~/Downloads/ansible_naming_standard.md
+# See: ../NAMING-STANDARD.md
 
 approved_verbs:
   - apply
@@ -33,6 +34,8 @@ approved_verbs:
   - verify
 
 # Verbs to avoid (for reference)
+# These are too generic and don't convey clear intent, nor are all "verbs" in the traditional sense,
+# but are commonly misused in script naming.
 avoid_verbs:
   - do
   - fix
