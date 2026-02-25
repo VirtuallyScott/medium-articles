@@ -6,21 +6,22 @@ Enforces verb-noun.py naming pattern with approved verbs
 
 import re
 import sys
-import yaml
 from pathlib import Path
 from typing import List, Set, Tuple
+
+import yaml
 
 
 def load_approved_verbs() -> Set[str]:
     """Load approved verbs from YAML configuration file."""
     verbs_file = Path(__file__).parent / "approved-verbs.yml"
-    
+
     try:
-        with open(verbs_file, 'r') as f:
+        with open(verbs_file, 'r', encoding='utf-8') as f:
             data = yaml.safe_load(f)
             return set(data.get('approved_verbs', []))
-    except Exception as e:
-        print(f"Warning: Could not load verbs file: {e}", file=sys.stderr)
+    except Exception:
+        print(f"Warning: Could not load verbs file: {verbs_file}", file=sys.stderr)
         # Fallback to hardcoded verbs if file cannot be loaded
         return {
             "apply", "audit", "bootstrap", "build", "cleanup",
@@ -34,7 +35,7 @@ def load_approved_verbs() -> Set[str]:
 def should_skip(filepath: Path) -> bool:
     """
     Determine if a Python file should be skipped from naming validation.
-    
+
     Skips:
     - __init__.py files
     - Test files (test_*.py, *_test.py)
@@ -43,34 +44,35 @@ def should_skip(filepath: Path) -> bool:
     """
     filename = filepath.name
     parts = filepath.parts
-    
+
     # Skip special Python files
-    if filename in ['__init__.py', '__main__.py', 'setup.py', 'conftest.py', 
+    if filename in ['__init__.py', '__main__.py', 'setup.py', 'conftest.py',
                     'manage.py', 'wsgi.py', 'asgi.py']:
         return True
-    
+
     # Skip test files (common patterns)
     if filename.startswith('test_') or filename.endswith('_test.py'):
         return True
-    
+
     # Skip files in common directories to ignore
-    skip_dirs = {'venv', 'env', '.venv', 'node_modules', 'build', 'dist', 
-                 '.tox', '__pycache__', '.pytest_cache', 'site-packages'}
+    skip_dirs = {'venv', 'env', '.venv', 'node_modules', 'build', 'dist',
+                 '.tox', '__pycache__', '.pytest_cache', 'site-packages',
+                 'lint-rules'}  # Skip custom ansible lint rules
     if any(skip_dir in parts for skip_dir in skip_dirs):
         return True
-    
+
     return False
 
 
 def check_filename(filename: str, approved_verbs: Set[str]) -> Tuple[bool, List[str]]:
     """
     Check if filename follows naming convention.
-    
+
     Returns:
         Tuple of (is_valid, list_of_errors)
     """
     errors = []
-    
+
     # Must match lowercase hyphen-separated pattern ending in .py
     if not re.match(r"^[a-z0-9]+-[a-z0-9-]+\.py$", filename):
         errors.append(
@@ -80,7 +82,7 @@ def check_filename(filename: str, approved_verbs: Set[str]) -> Tuple[bool, List[
 
     # Extract verb (first part before hyphen)
     verb = filename.split("-")[0]
-    
+
     # Check if verb is approved
     if verb not in approved_verbs:
         errors.append(
@@ -88,43 +90,43 @@ def check_filename(filename: str, approved_verbs: Set[str]) -> Tuple[bool, List[
             f"See tools/approved-verbs.yml for approved verbs."
         )
         return False, errors
-    
+
     return True, []
 
 
 def main():
     """Main entry point."""
     approved_verbs = load_approved_verbs()
-    
+
     if len(sys.argv) < 2:
         print("Usage: validate-python-naming.py <file1.py> [file2.py ...]")
         sys.exit(1)
-    
+
     files_to_check = sys.argv[1:]
     all_valid = True
     skipped_count = 0
-    
+
     for filepath in files_to_check:
         path = Path(filepath)
-        
+
         # Skip non-.py files
         if path.suffix != ".py":
             continue
-        
+
         # Skip special files
         if should_skip(path):
             skipped_count += 1
             continue
-            
+
         filename = path.name
         is_valid, errors = check_filename(filename, approved_verbs)
-        
+
         if not is_valid:
             all_valid = False
             print(f"\n❌ {filepath}")
             for error in errors:
                 print(f"   {error}")
-    
+
     if all_valid:
         if skipped_count > 0:
             print(f"✓ All Python scripts follow naming convention ({skipped_count} file(s) skipped)")

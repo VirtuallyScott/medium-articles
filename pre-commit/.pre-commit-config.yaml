@@ -12,8 +12,8 @@ repos:
     hooks:
       - id: ansible-lint
         name: Ansible-lint
-        description: Run ansible-lint on ansible/ directory  
-        entry: bash -c 'ansible-lint ansible/'
+        description: Run ansible-lint on ansible/ directory
+        entry: bash -c 'if [ -d "pre-commit/ansible" ]; then ansible-lint pre-commit/ansible/; fi'
         language: system
         always_run: true
         pass_filenames: false
@@ -21,7 +21,7 @@ repos:
       - id: shellcheck
         name: ShellCheck
         description: Run shellcheck on all shell scripts
-        entry: bash tools/validate-shell.sh
+        entry: bash pre-commit/tools/validate-shell.sh
         language: system
         types: [shell]
         pass_filenames: false
@@ -29,7 +29,7 @@ repos:
       - id: shell-naming
         name: Shell Script Naming Convention
         description: Enforce verb-noun.sh naming with approved verbs
-        entry: python3 tools/validate-shell-naming.py
+        entry: python3 pre-commit/tools/validate-shell-naming.py
         language: system
         types: [shell]
         pass_filenames: true
@@ -37,7 +37,7 @@ repos:
       - id: python-lint
         name: Python Linting
         description: Run Python linters (flake8, pylint, or ruff)
-        entry: bash tools/validate-python.sh
+        entry: bash pre-commit/tools/validate-python.sh
         language: system
         types: [python]
         pass_filenames: false
@@ -45,7 +45,7 @@ repos:
       - id: python-naming
         name: Python Script Naming Convention
         description: Enforce verb-noun.py naming with approved verbs
-        entry: python3 tools/validate-python-naming.py
+        entry: python3 pre-commit/tools/validate-python-naming.py
         language: system
         types: [python]
         pass_filenames: true

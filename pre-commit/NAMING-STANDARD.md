@@ -256,8 +256,8 @@ Combine clearly:
 
 # 7. Design Philosophy
 
-**Scripts (Shell/Python/Playbooks) = Actions**  
-**Roles = Capabilities**  
+**Scripts (Shell/Python/Playbooks) = Actions**
+**Roles = Capabilities**
 
 If it sounds like something you *do*, it is a script.
 

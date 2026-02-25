@@ -1,0 +1,10 @@
+[MESSAGES CONTROL]
+disable=
+    C0301,  # line-too-long
+    C0103,  # invalid-name (for module names with hyphens)
+    W0718,  # broad-exception-caught
+    E0401,  # import-error (for optional dependencies)
+    R0801   # duplicate-code
+
+[FORMAT]
+max-line-length=999

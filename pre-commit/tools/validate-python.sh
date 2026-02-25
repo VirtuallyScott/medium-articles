@@ -44,12 +44,24 @@ if command -v flake8 &> /dev/null; then
     echo -e "${GREEN}Running flake8...${NC}"
     flake8 --version
     echo ""
-    
-    if flake8 "${PYTHON_FILES[@]}" --max-line-length=120 --extend-ignore=E203,W503; then
-        echo -e "${GREEN}✓ flake8 passed!${NC}"
+
+    # Check if .flake8 config exists in repo root
+    if [ -f "$REPO_ROOT/.flake8" ]; then
+        # Use config file
+        if flake8 --config="$REPO_ROOT/.flake8" "${PYTHON_FILES[@]}"; then
+            echo -e "${GREEN}✓ flake8 passed!${NC}"
+        else
+            echo -e "${RED}✗ flake8 found issues${NC}"
+            LINT_FAILED=true
+        fi
     else
-        echo -e "${RED}✗ flake8 found issues${NC}"
-        LINT_FAILED=true
+        # Use default settings
+        if flake8 "${PYTHON_FILES[@]}" --max-line-length=120 --extend-ignore=E203,W503; then
+            echo -e "${GREEN}✓ flake8 passed!${NC}"
+        else
+            echo -e "${RED}✗ flake8 found issues${NC}"
+            LINT_FAILED=true
+        fi
     fi
     echo ""
 fi
@@ -60,12 +72,24 @@ if command -v pylint &> /dev/null; then
     echo -e "${GREEN}Running pylint...${NC}"
     pylint --version | head -n 1
     echo ""
-    
-    if pylint "${PYTHON_FILES[@]}" --max-line-length=120 --disable=C0114,C0115,C0116; then
-        echo -e "${GREEN}✓ pylint passed!${NC}"
+
+    # Check if .pylintrc config exists in repo root
+    if [ -f "$REPO_ROOT/.pylintrc" ]; then
+        # Use config file
+        if pylint --rcfile="$REPO_ROOT/.pylintrc" "${PYTHON_FILES[@]}"; then
+            echo -e "${GREEN}✓ pylint passed!${NC}"
+        else
+            echo -e "${RED}✗ pylint found issues${NC}"
+            LINT_FAILED=true
+        fi
     else
-        echo -e "${RED}✗ pylint found issues${NC}"
-        LINT_FAILED=true
+        # Use default settings
+        if pylint "${PYTHON_FILES[@]}" --max-line-length=120 --disable=C0114,C0115,C0116; then
+            echo -e "${GREEN}✓ pylint passed!${NC}"
+        else
+            echo -e "${RED}✗ pylint found issues${NC}"
+            LINT_FAILED=true
+        fi
     fi
     echo ""
 fi
@@ -76,7 +100,7 @@ if command -v ruff &> /dev/null; then
     echo -e "${GREEN}Running ruff...${NC}"
     ruff --version
     echo ""
-    
+
     if ruff check "${PYTHON_FILES[@]}"; then
         echo -e "${GREEN}✓ ruff passed!${NC}"
     else
